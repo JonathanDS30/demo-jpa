@@ -1,6 +1,8 @@
 package fr.diginamic;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,7 +26,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
-@Table(name = "Ville")
+@Table(name = "VILLE")
 
 public class Ville {
 
@@ -42,19 +48,20 @@ public class Ville {
 	@Column(name = "CATEGORIE", nullable = true, unique = false)
 	@Enumerated(EnumType.STRING)
 	private Categorie categorie;
+	
+	@ManyToOne
+	@JoinColumn(name = "ID_REGION")
+	private Region region;
+	
+	@ManyToMany
+	@JoinTable(name = "LIEN_VILLE_HABITANT",
+				joinColumns = @JoinColumn(name = "ID_VILLE", referencedColumnName = "ID"),
+				inverseJoinColumns = @JoinColumn(name = "ID_HABITANT", referencedColumnName = "ID"))
+	private List<Habitant> habitants = new ArrayList<Habitant>();
 
-	/**
-	 * @param nom
-	 * @param codePostal
-	 * @param dateRecensement
-	 * @param categorie
-	 */
-	public Ville(String nom, int codePostal, Date dateRecensement, Categorie categorie) {
-		super();
-		this.nom = nom;
-		this.codePostal = codePostal;
-		this.dateRecensement = dateRecensement;
-		this.categorie = categorie;
+
+	public Ville() {
+
 	}
 
 	/**
@@ -111,6 +118,41 @@ public class Ville {
 	 */
 	public void setCategorie(Categorie categorie) {
 		this.categorie = categorie;
+	}
+
+	/**
+	 * @return the region
+	 */
+	public Region getRegion() {
+		return region;
+	}
+
+	/**
+	 * @param region the region to set
+	 */
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the habitants
+	 */
+	public List<Habitant> getHabitants() {
+		return habitants;
 	}
 
 }
